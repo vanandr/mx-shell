@@ -1,0 +1,2 @@
+HOME=/root/shellprogram/
+PATH=/root/shellprogram/mx-shell
