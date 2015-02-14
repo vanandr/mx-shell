@@ -89,6 +89,60 @@ bool parse_shell_input_cmd (char* inputcmdbuff, int cmdlen)
     return true;
 }
 
+
+/**
+  * Validate the braces and presence of other illegal characters
+  */
+bool parse_shell_validate_braces_chars (char *cmdbuff, int cmdlen)
+{
+    int bracecount = 0;
+    int index = 0;
+
+    while ((index < cmdlen) && cmdbuff[index] != '\0') {
+        if (bracecount == 0 && cmdbuff[index] == 
+                '0') {
+            printf("\nStart with \'(\' braces illegal use of braces");
+            return false;
+        }
+
+        if (cmdbuff[index] == '[' ||
+            cmdbuff[index] == ']' ||
+            cmdbuff[index] == '}' ||
+            cmdbuff[index] == '{' ||
+            cmdbuff[index] == '|' ||
+            cmdbuff[index] == '&') {
+            printf("\n Illegal character %c encountered", cmdbuff[index]);
+            return false;
+        }
+
+        if (cmdbuff[index] == '(') {
+            bracecount++;
+        }
+
+        if (cmdbuff[index] == ')') {
+            bracecount--;
+        }
+        index++;
+    }
+
+    if (bracecount != 0) {
+        printf("\nMimatching braces in the command");
+        return false;
+    }
+
+    return true;
+
+}
+
+bool parse_shell_validate_cmd (char *cmdbuff, int cmdlen)
+{
+    if (parse_shell_validate_braces_chars(cmdbuff, cmdlen)) {
+        log("Failed to validate braces");
+        return false;
+    }
+    return true;
+}
+
 int main()
 {
     char cwdbuf[MAX_LINE_BUF];
@@ -103,8 +157,17 @@ int main()
     while (true) {
         printf("%s > ",getwd(cwdbuf));
         cmdlen = getline(&inputcmdbuff, &buffsize, stdin);
-        
+
         inputcmdbuff[cmdlen-1]='\0';
+
+        if (parse_shell_validate_cmd(inputcmdbuff, cmdlen)) {
+            continue;
+        }
+
+        if (execute_cmds()) {
+            continue;
+        }
+        
         log("Shell input %s %d", inputcmdbuff, cmdlen);
         parse_shell_input_cmd(inputcmdbuff, cmdlen);
     }
