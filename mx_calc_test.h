@@ -39,6 +39,25 @@ void inte(char c[],int val) {
      fprintf(in,"%s %d\n",c,val);
      fclose(in);
 }
+void divide(char st1[], char st2[])
+{
+   int val1 = extract(st1);
+   int val2 = extract(st2);
+   if(val2==0)
+   {
+      printf("division by 0  is not possible, try again");
+      prompt();
+   }
+   else
+   {
+      int divval=val1/val2;
+      printf("Division value %d\n",divval);
+      prompt();
+   }
+   prompt();
+}
+
+
 void mul(char st1[], char st2[])
 {
    int val1 = extract(st1);
@@ -87,7 +106,7 @@ void parse (const char *cmd) {
        char supadd[10]="add";
        char supsub[10]="sub";
        char supmul[10]="mul";
-       char supdiv[10]="div"; 
+       char supdiv[10]="divide"; 
        char supexit[10]="exit";
        char var[10];
        char var1[10];
@@ -106,7 +125,7 @@ void parse (const char *cmd) {
       }
       else if (!strncmp(cmd,supdiv,3)) {
           if(sscanf(cmd+3,"%s %s",var1,var2) > 0) {
-//             div(var1,var2);
+             divide(var1,var2);
              j=1;
           }
       }
