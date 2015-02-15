@@ -158,15 +158,6 @@ int main()
             continue;
         }
 
-<<<<<<< HEAD:mx_shell.c
-//        parse_shell_input_cmd(inputcmdbuff, cmdlen);
-
-//        if (execute_cmds()) {
-//            continue;
-//        }
-        
-=======
->>>>>>> master:mx-shell.c
         log("Shell input %s %d", inputcmdbuff, cmdlen);
     }
 
