@@ -158,12 +158,6 @@ int main()
             continue;
         }
 
-//        parse_shell_input_cmd(inputcmdbuff, cmdlen);
-
-//        if (execute_cmds()) {
-//            continue;
-//        }
-        
         log("Shell input %s %d", inputcmdbuff, cmdlen);
     }
 
