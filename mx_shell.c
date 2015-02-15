@@ -3,8 +3,9 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <string.h>
-#include <mx-debug.h>
-#include <mx-utils.h>
+#include <mx_debug.h>
+#include <mx_utils.h>
+#include <mx_cmd_parser.h>
 
 #define PROFILE_FILE "PROFILE"
 #define MAX_LINE_BUF 80
@@ -157,11 +158,11 @@ int main()
             continue;
         }
 
-        parse_shell_input_cmd(inputcmdbuff, cmdlen);
+//        parse_shell_input_cmd(inputcmdbuff, cmdlen);
 
-        if (execute_cmds()) {
-            continue;
-        }
+//        if (execute_cmds()) {
+//            continue;
+//        }
         
         log("Shell input %s %d", inputcmdbuff, cmdlen);
     }
