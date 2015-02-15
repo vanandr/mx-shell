@@ -169,6 +169,16 @@ int main()
             continue;
         }
 
+        if (!parser_pipe_init()) {
+            continue;
+        }
+
+//        if (!mx_shell_execute_cmds()) {
+//            continue;
+//        }
+
+        parser_cleanup();
+
         log("Shell input %s %d", inputcmdbuff, cmdlen);
     }
 

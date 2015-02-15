@@ -16,5 +16,7 @@ typedef struct cmd_token_t_ {
 } cmd_token_t;
 
 extern bool parse_shell_input_cmd(char *inputcmdbuff, int cmdlen);
-
+extern void parser_cleanup();
+extern int parser_get_total_commands();
+extern bool parser_pipe_init();
 #endif 

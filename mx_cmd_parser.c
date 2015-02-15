@@ -17,14 +17,15 @@ parser_print_cmd_token (void *data)
     int index = 0;
     cmd_token_t *cmd_token = data;
 
-    printf("=>>");
+    printf("{");
     while (index < MAX_CMD_ARGS) {
         if (cmd_token->args[index]) {
-            printf("(%d)%s",index, cmd_token->args[index]);
+            printf("[%d]%s,",index, cmd_token->args[index]);
         }
         index++;
     }
-   printf(",RFD:%d,WFD:%d ",cmd_token->pipefds[0], cmd_token->pipefds[1]);
+   printf("RFD:%d,WFD:%d",cmd_token->pipefds[0], cmd_token->pipefds[1]);
+   printf("} ");
 }
 void
 print_cmd_precedence_array ()
@@ -47,7 +48,7 @@ void parser_cmd_token_free_func (void *data)
     cmd_token_t *cmd_token = data;
     int args_index = 0;
 
-    log("\nFree %s token", cmd_token->args[0]);
+    log("Free %s token", cmd_token->args[0]);
     while (args_index < MAX_CMD_ARGS) {
         if (cmd_token->args[args_index]) {
             free(cmd_token->args[args_index]);
@@ -58,6 +59,16 @@ void parser_cmd_token_free_func (void *data)
     free(cmd_token);
 }
 
+int parser_get_total_commands () 
+{
+    int i = 0, cnt = 0;
+    while (i < MAX_PRECEDENCE_LEVEL) {
+        cnt += linked_list_get_node_count(&cmd_precedence_array[i]);
+        i++;
+    }
+    return cnt;
+}
+
 void parser_init_precedence_array ()
 {
     int i = 0;
@@ -66,6 +77,16 @@ void parser_init_precedence_array ()
         i++;
     }
 }
+
+void parser_cleanup ()
+{
+    int i = 0;
+    while (i < MAX_PRECEDENCE_LEVEL) {
+        linked_list_destroy(&cmd_precedence_array[i]);
+        i++;
+    }
+}
+
 
 bool parser_add_cmd_token_to_precedence_array
                         (linked_list_t *list,
