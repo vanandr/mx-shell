@@ -23,11 +23,11 @@ remove_white_spaces_until_character (char *str, int offset, int *_len)
 void print_cmd_error (char* inputcmdbuff, int errorindex) 
 {
         int i = 0;
-        printf("\n%s",inputcmdbuff);
+        printf("\n%s\n",inputcmdbuff);
                 
-        while (i <= errorindex) {
+        while (i < errorindex) {
             printf(" ");
+            i++;
         }
         printf("^");
-        printf("\n");
 }             

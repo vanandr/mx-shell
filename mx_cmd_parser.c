@@ -17,19 +17,19 @@ parser_print_cmd_token (void *data)
     int index = 0;
     cmd_token_t *cmd_token = data;
 
-    printf("->");
+    printf("=>>");
     while (index < MAX_CMD_ARGS) {
         if (cmd_token->args[index]) {
             printf("(%d)%s",index, cmd_token->args[index]);
         }
         index++;
     }
-   printf(",RFD:%d,WFD:%d",cmd_token->pipefds[0], cmd_token->pipefds[1]);
+   printf(",RFD:%d,WFD:%d ",cmd_token->pipefds[0], cmd_token->pipefds[1]);
 }
 void
 print_cmd_precedence_array ()
 {
-    int index;
+    int index = 0;
     linked_list_t *linked_list = NULL;
 
     while (index < MAX_PRECEDENCE_LEVEL) {
@@ -37,7 +37,9 @@ print_cmd_precedence_array ()
         printf("\nPrecedence %d: total commands %d:", index,
                 linked_list_get_node_count(linked_list));
         linked_list_walk(linked_list, parser_print_cmd_token);
+        index++;
     }
+    printf("\n");
 }
 
 
@@ -112,9 +114,6 @@ bool parse_shell_input_cmd (char* inputcmdbuff, int cmdlen)
 
     while (cmd_index < cmdlen -1) {
         ch = inputcmdbuff[cmd_index];
-        printf("\n character being parsed %c (%d)  index %d \n\n", ch, ch,
-                cmd_index);
-        sleep(2);
 
         switch (ch) {
             case '(':
@@ -136,23 +135,33 @@ bool parse_shell_input_cmd (char* inputcmdbuff, int cmdlen)
                 break;
 
             case ')':
+                if (cmd_token &&
+                    !parser_add_cmd_token_to_precedence_array(
+                        &cmd_precedence_array[curr_precedence_level],
+                        cmd_token)) {
+                    goto parser_cleanup;
+                }
+                cmd_token = NULL;
                 curr_precedence_level++;
-                if (curr_precedence_level >= MAX_PRECEDENCE_LEVEL) {
+                if (curr_precedence_level > MAX_PRECEDENCE_LEVEL) {
                     print_cmd_error(inputcmdbuff, cmd_index);
                     printf("\nOnly %d level of precedence is supported",
                             MAX_PRECEDENCE_LEVEL);
                     goto parser_cleanup;
                 }
+                if ((curr_precedence_level == MAX_PRECEDENCE_LEVEL) &&
+                        cmd_index !=(cmdlen-2)) {
+                    // We have some more cmds to parse but we have reached EOB
+                    print_cmd_error(inputcmdbuff, cmd_index);
+                    printf("\nMismatched braces");
+                    goto parser_cleanup;
+                }
+
                 break;
 
             case ',':
                 // New command;
-                if (!cmd_token) {
-                    //  
-                    print_cmd_error(inputcmdbuff, cmd_index);
-                    printf("\nIllegal usage of \',\'");
-                }
-                if (!parser_add_cmd_token_to_precedence_array(
+                if (cmd_token && !parser_add_cmd_token_to_precedence_array(
                         &cmd_precedence_array[curr_precedence_level],
                         cmd_token)) {
                     goto parser_cleanup;
@@ -189,7 +198,7 @@ bool parse_shell_input_cmd (char* inputcmdbuff, int cmdlen)
                 }
                 cmd_token->args[cmd_arg_index] =
                     strndup(inputcmdbuff+sub_cmd_start_index,
-                            sub_cmd_start_index-cmd_index);
+                    cmd_index-sub_cmd_start_index+1);
                 break;
             case ' ':
                 break;
@@ -223,18 +232,16 @@ bool parse_shell_input_cmd (char* inputcmdbuff, int cmdlen)
                         printf("\nIllegal Command provided");
                         goto parser_cleanup;
                     }
-                    cmd_token->args[cmd_arg_index] =
+                    cmd_token->args[cmd_arg_index] = 
                         strndup(inputcmdbuff+cmd_start_index,
-                                cmd_start_index-cmd_index);
+                                cmd_index-cmd_start_index+1);
                 }
         }
         cmd_index++;
     }
-    printf("\n End of while loop");
-    sleep(2);
 
 #ifdef DEBUG 
-//    print_cmd_precedence_array();
+    print_cmd_precedence_array();
 #endif
     return true;
 parser_cleanup:

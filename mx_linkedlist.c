@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <mx_linkedlist.h>
+#include <unistd.h>
 
 
 bool linked_list_init (linked_list_t *list, list_free_func_t free_func) 
