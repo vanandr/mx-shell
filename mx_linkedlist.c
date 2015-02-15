@@ -49,6 +49,15 @@ bool linked_list_add_node (linked_list_t *list,
     return true;
 }
 
+int linked_list_get_node_count (linked_list_t *list)
+{
+    int cnt = 0;
+    if (list) {
+        cnt = list->node_cnt;
+    }
+    return cnt;
+}
+
 bool linked_list_destroy (linked_list_t *list)
 {
     list_node_t *node = NULL, *tmp_node = NULL;

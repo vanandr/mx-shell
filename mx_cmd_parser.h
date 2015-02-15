@@ -1,6 +1,9 @@
 #ifndef __MX_CMD_TOKEN_H__
+#define __MX_CMD_TOKEN_H__
 #include <stdio.h>
+#include <stdbool.h>
 
+#define MAX_PRECEDENCE_LEVEL 5
 #define MAX_CMD_ARGS 5
 
 typedef struct cmd_token_t_ {
@@ -11,5 +14,7 @@ typedef struct cmd_token_t_ {
     // The pipe associated with the cmd.
     int pipefds[2];
 } cmd_token_t;
+
+extern bool parse_shell_input_cmd(char *inputcmdbuff, int cmdlen);
 
 #endif 

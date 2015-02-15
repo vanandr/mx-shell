@@ -20,6 +20,7 @@ typedef struct linked_list_t_ {
 
 extern bool linked_list_init(linked_list_t *list, list_free_func_t free_func);
 extern bool linked_list_add_node(linked_list_t *list,void *data);
-bool linked_list_walk(linked_list_t *list, list_walk_func_t walk_func);
+extern bool linked_list_walk(linked_list_t *list, list_walk_func_t walk_func);
+extern int linked_list_get_node_count(linked_list_t *list);
 
 #endif //__LINKED-LIST_H__

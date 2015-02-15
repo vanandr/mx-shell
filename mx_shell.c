@@ -131,7 +131,7 @@ bool parse_shell_validate_braces_chars (char *cmdbuff, int cmdlen)
 
 bool parse_shell_validate_cmd (char *cmdbuff, int cmdlen)
 {
-    if (parse_shell_validate_braces_chars(cmdbuff, cmdlen)) {
+    if (!parse_shell_validate_braces_chars(cmdbuff, cmdlen)) {
         log("Failed to validate braces");
         return false;
     }
@@ -155,14 +155,19 @@ int main()
 
         inputcmdbuff[cmdlen-1]='\0';
 
-        if (parse_shell_validate_cmd(inputcmdbuff, cmdlen)) {
+        if (!parse_shell_validate_cmd(inputcmdbuff, cmdlen)) {
             continue;
         }
 
         if (!strncmp(inputcmdbuff,"calc",4)) {
             printf("******** This is test %s",inputcmdbuff);
             calctest();
-        }       
+            continue;
+        }
+
+        if (!parse_shell_input_cmd(inputcmdbuff, cmdlen)) {
+            continue;
+        }
 
         log("Shell input %s %d", inputcmdbuff, cmdlen);
     }

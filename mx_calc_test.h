@@ -7,6 +7,31 @@
 void prompt(){
    printf(">");
 }
+int extract(char st1[])
+{
+
+     char line[512]; // or however large you think these lines will be
+     char string1[20];
+     int intval;
+     int val2;
+
+     FILE *in1 = fopen ("file.txt", "rw");  /* open the file for reading */
+     int cur_line = 0;
+     while(fgets(line, 512, in1) != NULL) {
+            /* get a line, up to 512 chars from in.  done if NULL */
+              sscanf (line, "%s %d\n",string1,&intval);
+              if(strcmp(string1,st1)==0)
+              {
+                val2=intval;
+         //       printf("%d",val2);
+              }
+
+             // now you should store or manipulate those strings
+            //  printf("%s,%d",string1,intval);
+      }
+   fclose(in1);  /* close the file */
+   return(val2);
+}
 void inte(char c[],int val) {
 
      FILE *in = fopen ("file.txt", "a+");  /* open the file for reading */
@@ -40,31 +65,6 @@ void sub(char st1[], char st2[])
    int addedval=val1 - val2;
    printf("Substracted value %d\n",addedval);
    prompt();
-}
-int extract(char st1[])
-{
-
-     char line[512]; // or however large you think these lines will be
-     char string1[20];
-     int intval;
-     int val2;
-
-     FILE *in1 = fopen ("file.txt", "rw");  /* open the file for reading */
-     int cur_line = 0;
-     while(fgets(line, 512, in1) != NULL) {
-            /* get a line, up to 512 chars from in.  done if NULL */
-              sscanf (line, "%s %d\n",string1,&intval);
-              if(strcmp(string1,st1)==0)
-              {
-                val2=intval;
-         //       printf("%d",val2);
-              }
-
-             // now you should store or manipulate those strings
-            //  printf("%s,%d",string1,intval);
-      }
-   fclose(in1);  /* close the file */
-   return(val2);
 }
 
 void test() {
