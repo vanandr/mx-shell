@@ -164,10 +164,6 @@ int main()
             continue;
         }
 
-        if (execute_cmds()) {
-            continue;
-        }
-        
         log("Shell input %s %d", inputcmdbuff, cmdlen);
         parse_shell_input_cmd(inputcmdbuff, cmdlen);
     }
