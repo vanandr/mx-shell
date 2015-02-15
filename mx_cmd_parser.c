@@ -42,20 +42,6 @@ print_cmd_precedence_array ()
     printf("\n");
 }
 
-
-cmd_token_t* get_new_cmd_token () 
-{
-    cmd_token_t *cmd_token = NULL;
-
-    cmd_token = malloc(sizeof(cmd_token_t));
-    if (cmd_token) {
-        memset(cmd_token, 0, sizeof(cmd_token_t));
-    }
-    cmd_token->pipefds[0] = -1;
-    cmd_token->pipefds[1] = -1;
-    return (cmd_token);
-}
-
 void parser_cmd_token_free_func (void *data) 
 {
     cmd_token_t *cmd_token = data;
@@ -96,6 +82,8 @@ cmd_token_t* parser_cmd_token_new ()
         return NULL;
     }
     memset(cmd_token, 0, sizeof(cmd_token_t));
+    cmd_token->pipefds[0] = -1;
+    cmd_token->pipefds[1] = -1;
 
     return (cmd_token);
 }
