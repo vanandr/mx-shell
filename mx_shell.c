@@ -6,6 +6,7 @@
 #include <mx_debug.h>
 #include <mx_utils.h>
 #include <mx_cmd_parser.h>
+#include <mx_calc_test.h>
 
 #define PROFILE_FILE "PROFILE"
 #define MAX_LINE_BUF 80
@@ -157,6 +158,11 @@ int main()
         if (parse_shell_validate_cmd(inputcmdbuff, cmdlen)) {
             continue;
         }
+
+        if (!strncmp(inputcmdbuff,"calc",4)) {
+            printf("******** This is test %s",inputcmdbuff);
+            calctest();
+        }       
 
         log("Shell input %s %d", inputcmdbuff, cmdlen);
     }

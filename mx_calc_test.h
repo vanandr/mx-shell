@@ -1,3 +1,5 @@
+#ifndef __MX_CALC_TEST_H__
+#define __MX_CALC_TEST_H__
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -148,3 +150,5 @@ void calctest() {
     }
 
 }
+
+#endif
