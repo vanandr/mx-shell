@@ -1,5 +1,5 @@
-#include <mx-utils.h>
-#include <mx-debug.h>
+#include <mx_utils.h>
+#include <mx_debug.h>
 /*
  * Remove all white spaces until encounter a character.
  */
@@ -20,3 +20,14 @@ remove_white_spaces_until_character (char *str, int offset, int *_len)
     *_len = len;
 }
 
+void print_cmd_error (char* inputcmdbuff, int errorindex) 
+{
+        int i = 0;
+        printf("\n%s",inputcmdbuff);
+                
+        while (i <= errorindex) {
+            printf(" ");
+        }
+        printf("^");
+        printf("\n");
+}             

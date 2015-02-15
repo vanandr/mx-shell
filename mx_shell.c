@@ -3,13 +3,13 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <string.h>
-#include <mx-debug.h>
-#include <mx-utils.h>
+#include <mx_debug.h>
+#include <mx_utils.h>
+#include <mx_cmd_parser.h>
 
 #define PROFILE_FILE "PROFILE"
 #define MAX_LINE_BUF 80
 #define MAX_CMD_BUF 1024
-
 
 void environment_init ()
 {
@@ -83,12 +83,6 @@ envloopcontinue:
     }
     fclose(profileFP);
 }
-
-bool parse_shell_input_cmd (char* inputcmdbuff, int cmdlen)
-{
-    return true;
-}
-
 
 /**
   * Validate the braces and presence of other illegal characters
@@ -164,8 +158,16 @@ int main()
             continue;
         }
 
+<<<<<<< HEAD:mx_shell.c
+//        parse_shell_input_cmd(inputcmdbuff, cmdlen);
+
+//        if (execute_cmds()) {
+//            continue;
+//        }
+        
+=======
+>>>>>>> master:mx-shell.c
         log("Shell input %s %d", inputcmdbuff, cmdlen);
-        parse_shell_input_cmd(inputcmdbuff, cmdlen);
     }
 
     free(inputcmdbuff);
