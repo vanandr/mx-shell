@@ -1,1 +1,4 @@
 *.o
+*.swp
+a.out
+mx-shell
