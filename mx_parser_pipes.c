@@ -41,7 +41,5 @@ bool parser_pipe_init ()
         }
     }
 
-
-
     return true;
 }
