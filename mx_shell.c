@@ -11,6 +11,8 @@
 #define PROFILE_FILE "PROFILE"
 #define MAX_LINE_BUF 80
 #define MAX_CMD_BUF 1024
+extern void parser_close_clean_pipes();
+extern bool parser_pipe_execute_cmds();
 
 void environment_init ()
 {
@@ -71,7 +73,7 @@ void environment_init ()
         }
 
         if (valindex != read) {
-            setenv(env, filestr+valindex, 1);
+            setenv(env, filestr+valindex, 0);
             log("env var:%s:\"%s\"", env, getenv(env));
         } else {
             goto envloopcontinue;
@@ -150,13 +152,13 @@ int main()
     inputcmdbuff = malloc(MAX_CMD_BUF);
 
     while (true) {
-        printf("%s > ",getwd(cwdbuf));
+        printf("\n\n%s > ",getwd(cwdbuf));
         cmdlen = getline(&inputcmdbuff, &buffsize, stdin);
 
         inputcmdbuff[cmdlen-1]='\0';
 
         if (!parse_shell_validate_cmd(inputcmdbuff, cmdlen)) {
-            continue;
+            goto parser_cleanup;
         }
 
         if (!strncmp(inputcmdbuff,"calc",4)) {
@@ -166,18 +168,20 @@ int main()
         }
 
         if (!parse_shell_input_cmd(inputcmdbuff, cmdlen)) {
-            continue;
+            goto parser_cleanup;
         }
 
         if (!parser_pipe_init()) {
-            continue;
+            goto parser_cleanup;
         }
 
-//        if (!mx_shell_execute_cmds()) {
-//            continue;
-//        }
-
+        if (!parser_pipe_execute_cmds()) {
+            goto parser_cleanup;
+        }
+parser_cleanup:
+        parser_close_clean_pipes();
         parser_cleanup();
+        printf("\n");
 
         log("Shell input %s %d", inputcmdbuff, cmdlen);
     }
