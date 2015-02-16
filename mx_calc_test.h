@@ -32,6 +32,12 @@ int extract(char st1[])
    fclose(in1);  /* close the file */
    return(val2);
 }
+void clear()
+{
+   int status;
+   status = remove("file.txt");
+   printf("Cleared all the data");
+}
 void inte(char c[],int val) {
 
      FILE *in = fopen ("file.txt", "a+");  /* open the file for reading */
@@ -39,6 +45,25 @@ void inte(char c[],int val) {
      fprintf(in,"%s %d\n",c,val);
      fclose(in);
 }
+void divide(char st1[], char st2[])
+{
+   int val1 = extract(st1);
+   int val2 = extract(st2);
+   if(val2==0)
+   {
+      printf("division by 0  is not possible, try again");
+      prompt();
+   }
+   else
+   {
+      int divval=val1/val2;
+      printf("Division value %d\n",divval);
+      prompt();
+   }
+   prompt();
+}
+
+
 void mul(char st1[], char st2[])
 {
    int val1 = extract(st1);
@@ -87,8 +112,10 @@ void parse (const char *cmd) {
        char supadd[10]="add";
        char supsub[10]="sub";
        char supmul[10]="mul";
-       char supdiv[10]="div"; 
+       char supdiv[10]="divide"; 
        char supexit[10]="exit";
+       char supclear[10]="clear";
+       char suphelp[10]="help";
        char var[10];
        char var1[10];
        char var2[10];
@@ -98,6 +125,19 @@ void parse (const char *cmd) {
       if(!strncmp(cmd,supexit,4)) {
            j=1; exit(0); 
           }
+      else if (!strncmp(cmd,suphelp,4)) {
+             printf("integer X $X- To enter integer values\n");
+             printf("add X Y- To Add 2  integer values\n");
+             printf("Mul X Y- To multiply integer values X and Y\n");
+             printf("divide X Y- To divide integer values X and Y\n");
+             printf("clear - To clear data in the variables\n");
+             printf("exit- To exit the program\n");
+             j=1;
+            }
+      else if (!strncmp(cmd,supclear,4)) {
+             clear();
+             j=1;
+            }
       else if (!strncmp(cmd,supmul,3)) {
           if(sscanf(cmd+3,"%s %s",var1,var2) > 0) {
              mul(var1,var2);
@@ -106,7 +146,7 @@ void parse (const char *cmd) {
       }
       else if (!strncmp(cmd,supdiv,3)) {
           if(sscanf(cmd+3,"%s %s",var1,var2) > 0) {
-//             div(var1,var2);
+             divide(var1,var2);
              j=1;
           }
       }

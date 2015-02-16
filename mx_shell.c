@@ -7,6 +7,9 @@
 #include <mx_utils.h>
 #include <mx_cmd_parser.h>
 #include <mx_calc_test.h>
+#include "signaltest.h"
+#include <signal.h>
+
 
 #define PROFILE_FILE "PROFILE"
 #define MAX_LINE_BUF 80
@@ -142,6 +145,8 @@ bool parse_shell_validate_cmd (char *cmdbuff, int cmdlen)
 
 int main()
 {
+    signal(SIGINT, sigint_handler);
+
     char cwdbuf[MAX_LINE_BUF];
     char *inputcmdbuff = NULL;
     size_t buffsize= MAX_CMD_BUF;
@@ -162,7 +167,6 @@ int main()
         }
 
         if (!strncmp(inputcmdbuff,"calc",4)) {
-            printf("******** This is test %s",inputcmdbuff);
             calctest();
             continue;
         }
