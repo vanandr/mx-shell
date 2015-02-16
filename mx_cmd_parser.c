@@ -250,7 +250,7 @@ bool parse_shell_input_cmd (char* inputcmdbuff, int cmdlen)
     }
 
 #ifdef DEBUG 
-    print_cmd_precedence_array();
+//    print_cmd_precedence_array();
 #endif
     return true;
 parser_cleanup:
