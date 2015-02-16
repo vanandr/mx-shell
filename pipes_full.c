@@ -104,7 +104,7 @@ int main ()
             cmd[index].pid = pid;
             index++;
             printf("\n\n\npid:%d in parent process child pid %d",getpid(), pid);
-            //waitpid(pid, &status, 0);
+            waitpid(pid, &status, 0);
         }
     }
 }

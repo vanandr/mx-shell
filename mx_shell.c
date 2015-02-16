@@ -145,14 +145,16 @@ bool parse_shell_validate_cmd (char *cmdbuff, int cmdlen)
 
 int main()
 {
-    signal(SIGINT, sigint_handler);
-
     char cwdbuf[MAX_LINE_BUF];
     char *inputcmdbuff = NULL;
     size_t buffsize= MAX_CMD_BUF;
     size_t cmdlen;
 
+    system("clear");
+    signal(SIGINT, sigint_handler);
+
     environment_init();
+    chdir(getenv("HOME"));
 
     inputcmdbuff = malloc(MAX_CMD_BUF);
 
@@ -185,7 +187,6 @@ int main()
 parser_cleanup:
         parser_close_clean_pipes();
         parser_cleanup();
-        printf("\n");
 
         log("Shell input %s %d", inputcmdbuff, cmdlen);
     }

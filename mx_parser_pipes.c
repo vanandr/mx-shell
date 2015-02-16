@@ -7,6 +7,7 @@
 #include <mx_linkedlist.h>
 #include <mx_debug.h>
 #include <string.h>
+#include <errno.h>
 
 #define PIPE_READ_FD STDIN_FILENO
 #define PIPE_WRITE_FD STDOUT_FILENO
@@ -36,6 +37,9 @@ void parser_close_clean_pipes ()
         index++;
     }
     free(g_pipefds);
+    g_pipefds = NULL;
+    g_total_cmds = 0;
+
 }
 
 bool parser_pipe_init () 
@@ -126,6 +130,8 @@ bool parser_pipe_execute_cmds ()
     cmd_token_t *curr_token = NULL;
     linked_list_t *list = NULL;
     int precedence_index = 0;
+    int status;
+    int pid = 0;
 
     while (node == NULL &&
            precedence_index < MAX_PRECEDENCE_LEVEL) {
@@ -135,7 +141,6 @@ bool parser_pipe_execute_cmds ()
     }
 
     while (node) {
-        int pid = 0;
 
         curr_token = (cmd_token_t *) node->data;
 
@@ -158,6 +163,7 @@ bool parser_pipe_execute_cmds ()
             }
         } else { 
             next_node = node->next;
+            curr_token->pid = pid;
             while (next_node == NULL &&
                    precedence_index < MAX_PRECEDENCE_LEVEL) {
                 list = &cmd_precedence_array[precedence_index];
@@ -166,6 +172,28 @@ bool parser_pipe_execute_cmds ()
             }
             node = next_node;
         }
+    }
+    precedence_index = 0;
+    node = NULL;
+
+    while (node == NULL &&
+           precedence_index < MAX_PRECEDENCE_LEVEL) {
+        list = &cmd_precedence_array[precedence_index];
+        node = list->head;
+        precedence_index++;
+    }
+
+    while (node) {
+        next_node = node->next;
+        curr_token = node->data;
+//        wait(curr_token->pid, &status, 0);
+        while (next_node == NULL &&
+               precedence_index < MAX_PRECEDENCE_LEVEL) {
+            list = &cmd_precedence_array[precedence_index];
+            next_node = list->head;
+            precedence_index++;
+        }
+        node = next_node;
     }
     return true;
 }
