@@ -165,7 +165,6 @@ int main()
         }
 
         if (!strncmp(inputcmdbuff,"calc",4)) {
-            printf("******** This is test %s",inputcmdbuff);
             calctest();
             continue;
         }
