@@ -159,7 +159,7 @@ int main()
     inputcmdbuff = malloc(MAX_CMD_BUF);
 
     while (true) {
-        printf("\n\n%s > ",getwd(cwdbuf));
+        printf("%s > ",getwd(cwdbuf));
         cmdlen = getline(&inputcmdbuff, &buffsize, stdin);
 
         inputcmdbuff[cmdlen-1]='\0';
@@ -170,6 +170,15 @@ int main()
 
         if (!strncmp(inputcmdbuff,"calc",4)) {
             calctest();
+            continue;
+        }
+
+        if (!strncmp(inputcmdbuff, "exit", 4)) {
+            exit(0);
+        }
+
+        if (!strncmp(inputcmdbuff, "clear", 4)) {
+            system("clear");
             continue;
         }
 
