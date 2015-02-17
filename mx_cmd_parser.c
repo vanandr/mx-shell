@@ -116,6 +116,7 @@ bool parse_shell_input_cmd (char* inputcmdbuff, int cmdlen)
     int cmd_index = 0, cmd_arg_index = 0, curr_index = 0;
     int sub_cmd_start_index = 0;
     cmd_token_t *cmd_token = NULL;
+    int cmd_param_start_index = 0;
 
     int cnt = 0;
 
@@ -130,17 +131,16 @@ bool parse_shell_input_cmd (char* inputcmdbuff, int cmdlen)
                 curr_precedence_level--;
                 if (curr_precedence_level < 0) {
                     print_cmd_error(inputcmdbuff, cmd_index);
-                    printf("\nOnly %d level of precedence is supported",
+                    printf("\nOnly %d level of precedence is supported\n",
                             MAX_PRECEDENCE_LEVEL);
                     goto parser_cleanup;
                 }
                 if (cmd_token) {
                     // we are still parsing the command.
                     print_cmd_error(inputcmdbuff, cmd_index-1);
-                    printf("Every command should end with a \',\'");
+                    printf("\nEvery command should end with a \',\'\n");
                     goto parser_cleanup;
                 }
-
                 break;
 
             case ')':
@@ -154,7 +154,7 @@ bool parse_shell_input_cmd (char* inputcmdbuff, int cmdlen)
                 curr_precedence_level++;
                 if (curr_precedence_level > MAX_PRECEDENCE_LEVEL) {
                     print_cmd_error(inputcmdbuff, cmd_index);
-                    printf("\nOnly %d level of precedence is supported",
+                    printf("\nOnly %d level of precedence is supported\n",
                             MAX_PRECEDENCE_LEVEL);
                     goto parser_cleanup;
                 }
@@ -162,7 +162,7 @@ bool parse_shell_input_cmd (char* inputcmdbuff, int cmdlen)
                         cmd_index !=(cmdlen-2)) {
                     // We have some more cmds to parse but we have reached EOB
                     print_cmd_error(inputcmdbuff, cmd_index);
-                    printf("\nMismatched braces");
+                    printf("\nMismatched braces\n");
                     goto parser_cleanup;
                 }
 
@@ -177,74 +177,34 @@ bool parse_shell_input_cmd (char* inputcmdbuff, int cmdlen)
                 }
                 cmd_token = NULL;
                 break;
-            case '-':
-                sub_cmd_start_index = cmd_index;
+            case ' ':
+                break;
+
+            default:
+                cmd_param_start_index = cmd_index;
                 if (!cmd_token) {
-                    /* Something wrong, 
-                       we are in the middle of parsing the argument 
-                       of the token.
-                     */
-                    print_cmd_error(inputcmdbuff, cmd_index);
-                    printf("\nUnexpected start of command");
-                    goto parser_cleanup;
+                    // this is start of a new token.
+                    cmd_token = parser_cmd_token_new();
+                    cmd_arg_index = 0;
+                } else {
+                    cmd_arg_index++;
                 }
-                cmd_arg_index++;
-                cmd_index++;
                 while (cmd_index < cmdlen) {
                     ch = inputcmdbuff[cmd_index];
-                    if (!isalpha(ch)) {
-                        // We could have encountered anything from space or
-                        // comma, braces.
+                    if (ch == ' ' || ch == ',' || ch == '(' || ch == ')') {
                         cmd_index--;
                         break;
                     }
                     cmd_index++;
                 }
                 if (cmd_index == cmdlen) {
-                    print_cmd_error(inputcmdbuff, sub_cmd_start_index);
-                    printf("\nIllegal Command arguments provided");
+                    print_cmd_error(inputcmdbuff, cmd_param_start_index);
+                    printf("\nIllegal Command provided");
                     goto parser_cleanup;
                 }
-                cmd_token->args[cmd_arg_index] =
-                    strndup(inputcmdbuff+sub_cmd_start_index,
-                    cmd_index-sub_cmd_start_index+1);
-                break;
-            case ' ':
-                break;
-
-            default:
-                if (isalpha(ch))  {
-                    int cmd_start_index = 0;
-
-                    if (!cmd_token) {
-                        // This is start of a new token.
-                        cmd_token = parser_cmd_token_new();
-                        cmd_arg_index = 0;
-                    } else {
-                        // we are parsing the argument of a command.
-                        cmd_arg_index++;
-                    }
-
-                    cmd_start_index = cmd_index;
-                    while (cmd_index < cmdlen) {
-                        ch = inputcmdbuff[cmd_index];
-                        if (!isalpha(ch)) {
-                            // break end of the current command.
-                            // Go back one step.
-                            cmd_index--;
-                            break;
-                        }
-                        cmd_index++;
-                    }
-                    if (cmd_index == cmdlen) {
-                        print_cmd_error(inputcmdbuff, cmd_start_index);
-                        printf("\nIllegal Command provided");
-                        goto parser_cleanup;
-                    }
-                    cmd_token->args[cmd_arg_index] = 
-                        strndup(inputcmdbuff+cmd_start_index,
-                                cmd_index-cmd_start_index+1);
-                }
+                cmd_token->args[cmd_arg_index] = 
+                    strndup(inputcmdbuff+ cmd_param_start_index,
+                            cmd_index-cmd_param_start_index+1);
         }
         cmd_index++;
     }

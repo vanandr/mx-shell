@@ -158,8 +158,8 @@ bool parser_pipe_execute_cmds ()
             parser_close_clean_pipes();
 
             if (execvp(curr_token->args[0], curr_token->args) < 0) {
-                printf("\n Failed to execute command %s", curr_token->args[0]);
-                return false;
+                printf("\nFailed to execute command \'%s\'\n", curr_token->args[0]);
+                exit(1);
             }
         } else { 
             next_node = node->next;

@@ -25,9 +25,9 @@ void print_cmd_error (char* inputcmdbuff, int errorindex)
         int i = 0;
         printf("\n%s\n",inputcmdbuff);
                 
-        while (i < errorindex) {
+        while (i < (errorindex-1)) {
             printf(" ");
             i++;
         }
-        printf("^");
+        printf(KRED"^^^"KNRM);
 }             

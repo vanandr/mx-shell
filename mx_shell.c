@@ -101,7 +101,8 @@ bool parse_shell_validate_braces_chars (char *cmdbuff, int cmdlen)
     while ((index < cmdlen) && cmdbuff[index] != '\0') {
         if (bracecount == 0 && cmdbuff[index] == 
                 '0') {
-            printf("\nStart with \'(\' braces illegal use of braces");
+            print_cmd_error(cmdbuff, index);
+            printf("\nStart with \'(\' braces illegal use of braces\n");
             return false;
         }
 
@@ -111,7 +112,8 @@ bool parse_shell_validate_braces_chars (char *cmdbuff, int cmdlen)
             cmdbuff[index] == '{' ||
             cmdbuff[index] == '|' ||
             cmdbuff[index] == '&') {
-            printf("\n Illegal character %c encountered", cmdbuff[index]);
+            print_cmd_error(cmdbuff, index);
+            printf("\nIllegal character %c encountered\n", cmdbuff[index]);
             return false;
         }
 
@@ -126,7 +128,8 @@ bool parse_shell_validate_braces_chars (char *cmdbuff, int cmdlen)
     }
 
     if (bracecount != 0) {
-        printf("\nMimatching braces in the command");
+        print_cmd_error(cmdbuff, index);
+        printf("\nMismatching braces in the command\n");
         return false;
     }
 
@@ -159,7 +162,7 @@ int main()
     inputcmdbuff = malloc(MAX_CMD_BUF);
 
     while (true) {
-        printf("%s > ",getwd(cwdbuf));
+        printf(KCYN"%s > "KNRM,getwd(cwdbuf));
         cmdlen = getline(&inputcmdbuff, &buffsize, stdin);
 
         inputcmdbuff[cmdlen-1]='\0';
