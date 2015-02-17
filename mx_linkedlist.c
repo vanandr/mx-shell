@@ -5,7 +5,9 @@
 #include <mx_linkedlist.h>
 #include <unistd.h>
 
-
+/*
+* Init the linked list, memory for the list is allready allocated.
+*/
 bool linked_list_init (linked_list_t *list, list_free_func_t free_func) 
 {
     if (!list) {
@@ -16,6 +18,9 @@ bool linked_list_init (linked_list_t *list, list_free_func_t free_func)
     return true;
 }
 
+/*
+* Add the data to a linked list.
+*/
 bool linked_list_add_node (linked_list_t *list, 
                            void *data)
 {
@@ -50,6 +55,10 @@ bool linked_list_add_node (linked_list_t *list,
     return true;
 }
 
+
+/*
+* Get the number of nodes in the list.
+*/
 int linked_list_get_node_count (linked_list_t *list)
 {
     int cnt = 0;
@@ -59,6 +68,9 @@ int linked_list_get_node_count (linked_list_t *list)
     return cnt;
 }
 
+/*
+* Destroy the linked list.
+*/
 bool linked_list_destroy (linked_list_t *list)
 {
     list_node_t *node = NULL, *tmp_node = NULL;
@@ -79,6 +91,9 @@ bool linked_list_destroy (linked_list_t *list)
     return true;
 }
 
+/*
+* Walk over the linked list, call the walk_func call back for every node data.
+*/
 bool linked_list_walk (linked_list_t *list, 
                        list_walk_func_t walk_func)
 {

@@ -9,8 +9,14 @@
 #include <unistd.h>
 
 #define MAX_PRECEDENCE_LEVEL 5
-
+/*
+ * The table the maintians the precedence array.
+*/
 linked_list_t cmd_precedence_array[MAX_PRECEDENCE_LEVEL];
+
+/*
+* Print the command token, information.
+*/
 void 
 parser_print_cmd_token (void *data)
 {
@@ -27,6 +33,10 @@ parser_print_cmd_token (void *data)
    printf("RFD:%d,WFD:%d",cmd_token->pipefds[0], cmd_token->pipefds[1]);
    printf("} ");
 }
+
+/**
+* Print the command precedence array.
+*/
 void
 print_cmd_precedence_array ()
 {
@@ -43,6 +53,9 @@ print_cmd_precedence_array ()
     printf("\n");
 }
 
+/*
+* Free the parser command token.
+*/
 void parser_cmd_token_free_func (void *data) 
 {
     cmd_token_t *cmd_token = data;
@@ -59,6 +72,9 @@ void parser_cmd_token_free_func (void *data)
     free(cmd_token);
 }
 
+/*
+* Get the total number of command tokens.
+*/
 int parser_get_total_commands () 
 {
     int i = 0, cnt = 0;
@@ -69,6 +85,9 @@ int parser_get_total_commands ()
     return cnt;
 }
 
+/*
+* Initialize the precedence array.
+*/
 void parser_init_precedence_array ()
 {
     int i = 0;
@@ -78,6 +97,9 @@ void parser_init_precedence_array ()
     }
 }
 
+/*
+* Cleanup the tokens.
+*/
 void parser_cleanup ()
 {
     int i = 0;
@@ -87,7 +109,9 @@ void parser_cleanup ()
     }
 }
 
-
+/*
+* Add the token to the precedence list.
+*/
 bool parser_add_cmd_token_to_precedence_array
                         (linked_list_t *list,
                         cmd_token_t *cmd_token)
@@ -95,6 +119,9 @@ bool parser_add_cmd_token_to_precedence_array
     return (linked_list_add_node(list, (void *)cmd_token));
 }
 
+/*
+* Create a new command token.
+*/
 cmd_token_t* parser_cmd_token_new () 
 {
     cmd_token_t *cmd_token = NULL;
@@ -109,6 +136,9 @@ cmd_token_t* parser_cmd_token_new ()
     return (cmd_token);
 }
 
+/*
+* Parse the input command.
+*/
 bool parse_shell_input_cmd (char* inputcmdbuff, int cmdlen)
 {
     char ch;

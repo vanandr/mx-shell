@@ -19,7 +19,9 @@ remove_white_spaces_until_character (char *str, int offset, int *_len)
     }
     *_len = len;
 }
-
+/*
+* Print an error message
+*/
 void print_cmd_error (char* inputcmdbuff, int errorindex) 
 {
         int i = 0;

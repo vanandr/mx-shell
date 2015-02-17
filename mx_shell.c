@@ -17,6 +17,10 @@
 extern void parser_close_clean_pipes();
 extern bool parser_pipe_execute_cmds();
 
+
+/*
+* Parse thru the profile file and set the appropriate environment.
+*/
 void environment_init ()
 {
     size_t len = 0, read;

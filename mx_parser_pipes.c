@@ -11,13 +11,21 @@
 
 #define PIPE_READ_FD STDIN_FILENO
 #define PIPE_WRITE_FD STDOUT_FILENO
-
+/*
+* Global array of pipes.
+*/
 int *g_pipefds = NULL;
+/*
+* The total number of commands.
+*/
 int g_total_cmds = 0;
 
 extern linked_list_t cmd_precedence_array[MAX_PRECEDENCE_LEVEL];
 extern void print_cmd_precedence_array();
 
+/*
+* Close and free the allocated pipes.
+*/
 void parser_close_clean_pipes ()
 {
     int index = 0;
@@ -42,6 +50,10 @@ void parser_close_clean_pipes ()
 
 }
 
+/*
+* Create the required number of pipes.
+* and connect the parser command tokens.
+*/
 bool parser_pipe_init () 
 {
     int index = 0;
@@ -123,6 +135,9 @@ bool parser_pipe_init ()
     return true;
 }
 
+/*
+* Execute the commands in parallel.
+*/
 
 bool parser_pipe_execute_cmds () 
 {

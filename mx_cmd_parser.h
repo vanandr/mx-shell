@@ -5,7 +5,10 @@
 
 #define MAX_PRECEDENCE_LEVEL 5
 #define MAX_CMD_ARGS 5
-
+/*
+* The command token,
+* Holds the command and the associated arguments.
+*/
 typedef struct cmd_token_t_ {
     // we can support 8 arguements for now.
     char *args[MAX_CMD_ARGS];
