@@ -159,6 +159,17 @@ int main()
     environment_init();
     chdir(getenv("HOME"));
 
+    printf(KYEL"\n !!!!!!!   Welcome to the MX-SHELL  !!!!!!\n");
+    printf("\n Source code available @ https://github.com/vanandr/mx-shell\n");
+    printf("\n Environmental variables are parsed from %s file\n",PROFILE_FILE);
+    printf("\n Command help:");
+    printf("\n clear - Clear screen");
+    printf("\n exit - Exists the MX-Shell");
+    printf("\n calc - Starts the Calculator Program");
+    printf("\n (cmd1, (cmd2), cmd3) - Pipelines cmds in the following order");
+    printf ("\n \t\t\tcmd2-->cmd1-->cmd3\n"KNRM);
+
+
     inputcmdbuff = malloc(MAX_CMD_BUF);
 
     while (true) {

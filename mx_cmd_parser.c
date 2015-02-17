@@ -199,7 +199,7 @@ bool parse_shell_input_cmd (char* inputcmdbuff, int cmdlen)
                 }
                 if (cmd_index == cmdlen) {
                     print_cmd_error(inputcmdbuff, cmd_param_start_index);
-                    printf("\nIllegal Command provided");
+                    printf("\nIllegal Command provided\n");
                     goto parser_cleanup;
                 }
                 cmd_token->args[cmd_arg_index] = 
