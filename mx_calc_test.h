@@ -51,7 +51,7 @@ void divide(char st1[], char st2[])
    int val2 = extract(st2);
    if(val2==0)
    {
-      printf("division by 0  is not possible, try again");
+      printf("division by 0  is not possible, try again\n");
       prompt();
    }
    else
